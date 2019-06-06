@@ -1,0 +1,55 @@
+{
+  "name": "text-categorization-desktop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": "dest/startservercluster.js",
+  "scripts": {
+    "start-server": "node ./startservercluster.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "chart.js": "^2.8.0",
+    "csv-js": "^1.0.0",
+    "echarts": "^4.2.1",
+    "echarts-wordcloud": "^1.1.3",
+    "express": "^4.17.1",
+    "file-saver": "^2.0.2",
+    "jquery": "^3.4.1",
+    "node-nlp": "^3.1.1",
+    "vue": "^2.6.10",
+    "vue-chartjs": "^3.4.2",
+    "vue-chartkick": "^0.5.1",
+    "vue-d3-network": "^0.1.28",
+    "vue-resize-directive": "^1.2.0",
+    "vue-router": "^3.0.6",
+    "vuetify": "^1.5.14",
+    "vuex": "^3.1.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.6",
+    "babelify": "^10.0.0",
+    "browserify": "^16.2.3",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-browserify": "^0.5.1",
+    "gulp-connect": "^5.7.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify": "^3.0.2",
+    "gulp-util": "^3.0.8"
+  },
+  "pkg": {
+    "assets": [
+      "dest/**/*"
+    ],
+    "targets": [
+      "node8"
+    ]
+  }
+}

@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
+    <!-- <link href="/node_modules/material-design-icons-iconfont/dist/material-design-icons.css" rel="stylesheet"> -->
+    <!-- <link href="/node_modules/material-design-icons/iconfont/material-icons.css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"> -->
+    <link href="/node_modules/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    <link href="/node_modules/vue-d3-network/dist/vue-d3-network.css" rel="stylesheet">
+    <link href="/node_modules/chart.js/dist/Chart.min.css" rel="stylesheet">
+    <meta name="viewport" content="">
+</head>
+
+<body>
+    <div id="app">
+        <v-app id="inspire">
+            <v-navigation-drawer v-model="drawer" clipped fixed app>
+                <v-list dense>
+                    <v-list-tile @click="$router.push({ name: 'entity-view'})">
+                        <v-list-tile-action>
+                            <v-icon>dashboard</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Entity</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <v-list-tile @click="$router.push({ name: 'category-view'})">
+                        <v-list-tile-action>
+                            <v-icon>dashboard</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Category</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <!-- <v-list-tile @click="$router.push({ name: 'data-view'})">
+                            <v-list-tile-action>
+                                <v-icon>dashboard</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>Import Data</v-list-tile-title>
+                            </v-list-tile-content>
+                    </v-list-tile> -->
+                    <v-list-tile @click="$router.push({ name: 'analysis-view' })">
+                        <v-list-tile-action>
+                            <v-icon>dashboard</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Analysis</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <v-list-tile @click="$router.push({ name: 'dashboard-view' })">
+                        <v-list-tile-action>
+                            <v-icon>dashboard</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Dashboard</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <!-- <v-list-tile @click="exportCSV()">
+                            <v-list-tile-action>
+                                <v-icon>dashboard</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>Export CSV</v-list-tile-title>
+                            </v-list-tile-content>
+                    </v-list-tile> -->
+
+                    <!-- <v-list-tile @click="$router.push({ name: 'import-csv' })">
+                        <v-list-tile-action>
+                            <v-icon>dashboard</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Import CSV</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <v-list-tile @click="$router.push({ name: 'entity-extraction'})">
+                        <v-list-tile-action>
+                            <v-icon>dashboard</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Entity Extraction</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <v-list-tile @click="$router.push({ name: 'category-rule'})">
+                        <v-list-tile-action>
+                            <v-icon>dashboard</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Categorization Rule</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <v-list-tile @click="">
+                        <v-list-tile-action>
+                            <v-icon>dashboard</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Dashboard</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <v-divider></v-divider>
+                    <v-list-tile @click="">
+                        <v-list-tile-action>
+                            <v-icon>dashboard</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Settings</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile> -->
+                    <v-divider></v-divider>
+                    <v-list-tile @click="saveProject()">
+                        <v-list-tile-action>
+                            <v-icon>dashboard</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Save Project</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <v-list-tile @click="importProject()">
+                        <v-list-tile-action>
+                            <v-icon>dashboard</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Import Project</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                </v-list>
+            </v-navigation-drawer>
+            <v-toolbar app fixed clipped-left color="blue darken-3">
+                <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+                <v-toolbar-title>Text Categorization by Entity</v-toolbar-title>
+            </v-toolbar>
+            <v-content>
+                <v-container fluid fill-height>
+                    <v-layout justify-center v-resize="onResize" id="container">
+                        <router-view>
+                        </router-view>
+                    </v-layout>
+                </v-container>
+            </v-content>
+            <v-footer app fixed>
+                <span>&copy; 2017</span>
+            </v-footer>
+        </v-app>
+    </div>
+
+    <script type="text/x-template" id="entity-template">
+        <v-flex xs12 sm12 >
+            <v-card>
+                <v-toolbar color="teal" dark>
+                        <v-btn icon @click="addEntity('Entity')">
+                                <v-icon>add</v-icon>
+                            </v-btn>
+                    <v-toolbar-title>Entity</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    
+                </v-toolbar>
+
+                  <v-expansion-panel focusable >
+                    <v-expansion-panel-content
+                      v-for="(entity,i) in entities"
+                      :key="i"
+                    >
+                      <template v-slot:header>
+                        <div>{{entity.name}}</div>
+                      </template>
+                      <v-card class="py-3 " > 
+                            
+                            <v-flex xs12 class=" mx-4 my-4 px-3 py-3 elevation-5">
+                                    <v-text-field
+                                        v-model="entity.name"
+                                      label="Entity Name"
+                                    ></v-text-field>
+                            
+                                <v-textarea
+                                    v-model="entity.keywords"
+                                    name="input-7-1"
+                                    
+                                    label="Keywords"
+                                    auto-grow
+                                    value=""
+                                    placeholder="input keywords, each line for one keyword"
+                                ></v-textarea>
+                            </v-flex>
+
+                     
+
+
+                        <div class="text-xs-right px-3">
+                            
+                            <v-btn 
+                                color="warning"
+                                @click="removeEntity(i)"
+                                
+                            >
+                                Remove Entity
+                            </v-btn>
+                                
+                        </div>
+                      </v-card>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+
+                  <v-btn @click="addEntity('Entity')" class="my-3" color="primary">
+                    Add Entity
+                </v-btn>
+
+            </v-card>
+        </v-flex>
+    </script>
+
+
+    <script type="text/x-template" id="category-template">
+        <v-flex xs12 sm12 >
+            <v-card>
+                <v-toolbar color="teal" dark>
+                        <v-btn icon @click="addCategory('Category')">
+                                <v-icon>add</v-icon>
+                            </v-btn>
+                    <v-toolbar-title>Category</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    
+                </v-toolbar>
+
+                  <v-expansion-panel focusable>
+                    <v-expansion-panel-content
+                      v-for="(category,i) in categories"
+                      :key="i"
+                    >
+                      <template v-slot:header>
+                        <div>{{category.name}}</div>
+                      </template>
+                      <v-card class="py-3">
+                                <v-flex xs12 class=" mx-4 my-4 px-3 py-3 elevation-3">
+                                    <v-text-field
+                                        v-model="category.name"
+                                        label="Category Name"
+
+                                    ></v-text-field>
+                                </v-flex>
+
+                                    <v-list
+                                    subheader
+                                    three-line
+                                    class="mx-3"
+                                    >
+                                    
+        
+          
+                                        <template grid-list-md text-xs-center v-for="(rule, index) in category.rules" >
+                                            <v-card class=" mx-2 my-4 px-3 py-3 elevation-3">
+                                            <v-subheader>Rule #{{index+1}}</v-subheader>
+                                            <v-layout row wrap >
+                                                
+                                                <v-flex xs12 md12  d-flex>
+                                                        <v-combobox
+                                                            v-model= "rule.primaryobjects"
+                                                            :items="entities"
+                                                            item-text="name"
+                                                            item-value="name"
+                                                            label="Primary Condition Entities"
+                                                            multiple
+                                                        ></v-combobox>
+                                                </v-flex>
+                                            
+                                                
+                                                <v-flex xs12 md12 d-flex>
+                                                        <v-combobox
+                                                            v-model= "rule.secondaryobjects"
+                                                            :items="entities"
+                                                            item-text="name"
+                                                            item-value="name"
+                                                            label="Secondary Condition Entities"
+                                                            multiple
+                                                        ></v-combobox>
+                                                </v-flex>
+
+                                            </v-layout>
+                                            <div class="text-xs-right">
+                                                    <v-btn 
+                                                        color="warning"
+                                                        @click="removeCategoryRule([i, index])"
+                                                    >
+                                                        Remove Rule
+                                                    </v-btn>
+                                                </div>
+                                            </v-card>
+                                            </template>
+        
+                                                
+                                    
+                                </v-list>
+        
+                                <v-layout row wrap>
+                                        <v-flex xs6 class="text-xs-left px-3">
+                                            <v-btn
+
+                                            color="success"
+                                            @click="addCategoryRule([i, 'Rule'])"
+                                            >
+                                            Add Rule
+                                            </v-btn>
+                                        </v-flex>
+                                        <v-flex xs6 class="text-xs-right px-3">
+
+                                            <v-btn 
+                                            color="warning"
+                                            @click="removeCategory(i)"
+                                        >
+                                            Remove Category
+                                        
+                                            </v-btn>
+                                        </v-flex>
+                                </v-layout>
+        
+                                
+
+
+
+                      </v-card>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+
+                  <v-btn  @click="addCategory('Category')" class="my-3" color="primary">
+                    Add Category
+                </v-btn>
+            </v-card>
+        </v-flex>
+    </script>
+
+    <script type="text/x-template" id="data-template">
+        <v-flex xs12 sm12>
+            <v-card>
+                <v-toolbar color="teal" dark>
+                        <v-btn icon @click="opencsvfile()">
+                                <v-icon>add</v-icon>
+                            </v-btn>
+
+                    <v-toolbar-title>Import CSV</v-toolbar-title>
+
+                    <v-spacer></v-spacer>
+
+                   
+
+                    
+
+                </v-toolbar>
+
+                <v-data-table v-if="this.csvdata!=null"
+                    :headers="headers"
+                    :items="rows"
+                    class="elevation-1"
+                >
+                    <template v-slot:headers="props">
+                    <tr>
+                        
+                        <th
+                        v-for="header in props.headers"
+                        :key="header.text"
+                        :class="['column']"
+                        >
+                        {{ header.text }}
+                        </th>
+                    </tr>
+                    </template>
+                    <template v-slot:items="props">
+                    <tr >
+                            <td v-for="(field,fidx) in headers" v-html="props.item[field.value]" :key="'column_'+fidx"></td>
+                    </tr>
+                    </template>
+                </v-data-table>
+            </v-card>
+        </v-flex>
+    </script>
+
+    <script type="text/x-template" id="csv-template">
+        <v-flex xs12 sm12>
+            <v-card>
+                <v-toolbar color="teal" dark>
+                    
+                        <v-btn icon @click="openfile()">
+                                <v-icon>add</v-icon>
+                            </v-btn>
+                    <v-toolbar-title>Import CSV</v-toolbar-title>
+
+                    <v-spacer></v-spacer>
+
+                    
+
+                    <v-btn icon @click="delfile()">
+                        <v-icon>delete</v-icon>
+                    </v-btn>
+
+                </v-toolbar>
+
+                <v-list subheader two-line v-if="csvfiles.length>0">
+                    <v-subheader>
+                        File List
+
+                    </v-subheader>
+
+                    <v-list-tile v-for="(file,fileIdx) in csvfiles" :key="'file_'+fileIdx" @click="">
+                        <v-list-tile-action>
+                            <v-checkbox v-model="file.selected"></v-checkbox>
+                        </v-list-tile-action>
+
+                        <v-list-tile-content @click="dialog=true;viewfile(file)">
+                            <v-list-tile-title>{{ file.fname }}</v-list-tile-title>
+                            <v-list-tile-sub-title>{{ Math.round(file.size/1024) }} KB | {{file.lastModifiedDate}} </v-list-tile-sub-title>
+                        </v-list-tile-content>
+
+                        <v-list-tile-action>
+                            
+
+                            <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+                                    <template v-slot:activator="{ on }">
+                                      
+                                      <v-btn icon ripple v-on="on" @click="viewfile(file)">
+                                            <v-icon color="grey lighten-1">search</v-icon>
+                                        </v-btn>
+            
+                                    </template>
+                                    <v-card>
+                                            <v-toolbar dark color="primary">
+                                              <v-btn icon dark @click="dialog = false">
+                                                <v-icon>close</v-icon>
+                                              </v-btn>
+                                              <v-toolbar-title>{{file.fname}}</v-toolbar-title>
+                                              <v-spacer></v-spacer>
+                                              <v-toolbar-items>
+                                                <v-btn dark flat @click="">Extract Entity</v-btn>
+
+                                                <v-menu bottom left>
+                                                        <template v-slot:activator="{ on }">
+                                                          <v-btn
+                                                            dark
+                                                            icon
+                                                            v-on="on"
+                                                          >
+                                                            <v-icon>more_vert</v-icon>
+                                                          </v-btn>
+                                                        </template>
+                                            
+                                                        <v-list>
+                                                            
+                                                            <v-list-tile :key="2" @click="">
+                                                                <v-list-tile-title>Column Filter</v-list-tile-title>
+                                                            </v-list-tile>
+                                                            <v-list-tile :key="3" @click="">
+                                                                <v-list-tile-title>Row Filter</v-list-tile-title>
+                                                            </v-list-tile>
+
+                                                        </v-list>
+                                                      </v-menu>
+
+                                              </v-toolbar-items>
+                                            </v-toolbar>
+                                            <v-data-table
+                                                v-model="selected"
+                                                :headers="headers"
+                                                :items="rows"
+                                                class="elevation-1"
+                                            >
+                                                <template v-slot:headers="props">
+                                                <tr>
+                                                    
+                                                    <th
+                                                    v-for="header in props.headers"
+                                                    :key="header.text"
+                                                    :class="['column']"
+                                                    >
+                                                    {{ header.text }}
+                                                    </th>
+                                                </tr>
+                                                </template>
+                                                <template v-slot:items="props">
+                                                <tr >
+                                                        <td v-for="(field,fidx) in headers" v-html="props.item[field.value]" :key="'column_'+fidx"></td>
+                                                    
+                                                    <!-- <td>{{ props.item.name }}</td>
+                                                    <td class="text-xs-right">{{ props.item.calories }}</td>
+                                                    <td class="text-xs-right">{{ props.item.fat }}</td>
+                                                    <td class="text-xs-right">{{ props.item.carbs }}</td>
+                                                    <td class="text-xs-right">{{ props.item.protein }}</td>
+                                                    <td class="text-xs-right">{{ props.item.iron }}</td> -->
+                                                </tr>
+                                                </template>
+                                            </v-data-table>
+                                          </v-card>
+                                  </v-dialog>
+                                  
+                        </v-list-tile-action>
+                    </v-list-tile>
+
+
+                </v-list>
+            </v-card>
+        </v-flex>
+    </script>
+
+    <script type="text/x-template" id="analysis-template">
+        <v-flex xs12 sm12 >
+            <v-card class="pb-4">
+                <v-toolbar color="teal" dark>
+                    <v-toolbar-title>Analysis</v-toolbar-title>
+                </v-toolbar>
+
+                <v-form class="py-3">
+                        <v-layout row wrap class="mx-2 py-4 elevation-3">
+                                
+                                <v-flex xs9 class="text-left text-bottom px-3" style="align-self: center;">
+                                        <span class=" ">Filename: {{filename}}</span>
+                                </v-flex>
+                                <v-flex xs3 class="text-xs-right px-3">
+                                        <v-btn @click="opencsvfile" color="primary">Import CSV</v-btn>
+                                </v-flex>
+                                <v-flex xs6 class="text-left px-3 py-3">
+                                        <v-select
+                                        v-model="idColumn"
+                                        :items="csvColumns"
+                                        label="ID Column"
+                                        data-vv-name="idColumn"
+                                        required
+                                    ></v-select>
+                                </v-flex>
+                                <v-flex xs6 class="text-left px-3 py-3">
+                                        <v-select
+                                        v-model="titleColumn"
+                                        :items="csvColumns"
+                                        label="Title Column"
+                                        data-vv-name="titleColumn"
+                                        required
+                                      ></v-select>
+                                    </v-flex>
+                                    <v-flex xs6 class="text-left px-3 py-3">
+                                            <v-select
+                                            v-model="columnsToExtract"
+                                            :items="csvColumns"
+                                            label="Columns for Entity Extraction"
+                                            data-vv-name="columnsToExtract"
+                                            multiple
+                                            required
+                                          ></v-select>
+                                    </v-flex>
+                                    <v-flex xs6 class="text-left px-3 py-3">
+                                        <v-checkbox
+                                            v-model="stripHTMLTag"
+                                            label="Strip HTML Tag"
+                                        ></v-checkbox>
+                                    </v-flex>
+                        </v-layout>
+
+                    
+
+                    
+
+                    
+                        </v-form>
+                    
+
+                    
+
+                            <v-layout row wrap class="my-2 mx-2 py-4 elevation-3">
+                                    <v-flex xs4 class="text-left px-3 py-3">
+                                            Load documents: {{Math.round(prepareProgress)}}%
+                                            <v-progress-linear v-model="prepareProgress"></v-progress-linear>
+                                        </v-flex>
+                                            <v-flex xs4 class="text-left px-3 py-3">
+                                                    Extract entities: {{Math.round(extractProgress)}}%
+                                                    <v-progress-linear v-model="extractProgress"></v-progress-linear>
+                                                </v-flex>
+                                                    <v-flex xs4 class="text-xs-right px-3 py-3">
+                                                            <v-btn :disabled="running" @click="startAnalysis" color="primary">Start</v-btn>
+                                                        </v-flex>
+
+                                    <v-flex xs6 class="text-left px-3 py-3">
+                                            <v-select
+                                            v-model="filtercategory"
+                                            :items="allcategories"
+                                            label="Filter by Category"
+                                            data-vv-name="filtercategory"
+                                            required
+                                            class="py-3"
+                                          ></v-select>
+                                        </v-flex>
+                                        <v-flex xs6 class="text-xs-right px-3 py-3">
+                                                <v-btn :disabled="running" @click="exportCSV" color="success">Export CSV</v-btn>
+                                            </v-flex>
+
+
+                                            <v-flex xs12 class="px-3 py-3">
+                                            <v-data-table
+                                            :headers="headers"
+                                            :items="rows"
+                                            class="elevation-1"
+                                        >
+                                            <template v-slot:headers="props">
+                                            <tr>
+                                                
+                                                <th
+                                                v-for="header in props.headers"
+                                                :key="header.text"
+                                                :class="['column']"
+                                                >
+                                                {{ header.text }}
+                                                </th>
+                                            </tr>
+                                            </template>
+                                            <template v-slot:items="props">
+                                            <tr >
+                                                <td v-for="(field,fidx) in headers" v-html="props.item[field.value]" :key="'column_'+fidx"></td>
+                                            </tr>
+                                            </template>
+                                        </v-data-table>
+                                    </v-flex>
+                            </v-layout>
+                    
+
+                   
+                
+                    
+                   
+
+                    
+
+                  
+
+
+
+            </v-card>
+        </v-flex>
+    </script>
+
+
+    <script type="text/x-template" id="dashboard-template">
+        <v-layout row>
+                <v-flex xs12 sm12 >
+                  <v-card >
+                    <v-toolbar color="teal" dark>
+                      <v-toolbar-title>Dashboard</v-toolbar-title>
+                    </v-toolbar>
+                    <v-container fluid grid-list-sm >
+                      <v-layout row wrap >
+
+                        <v-flex xs12 style="min-height:300px" class="py-3">
+                                <v-card>
+                                    <column-chart :data="chartdata"></column-chart>
+                                </v-card>
+                        </v-flex>
+                        
+                        <v-flex xs12  class="py-3">
+                                <v-card >
+                            <!-- <vue-word-cloud
+                                :words="words"
+                                :color="([, weight]) => weight > 10 ? 'DeepPink' : weight > 5 ? 'RoyalBlue' : 'Indigo'"
+                                font-family="Roboto"
+                                style="min-height:500px"
+                            /> -->
+
+                            <!-- <canvas id="wordcloud" style="width:100%;height:100%"></canvas> -->
+
+                                    <div id="wordcloud" style="width:100%;height:500px"></div>
+                                </v-card>
+                        </v-flex>
+<!-- 
+                        <v-flex xs12 style="min-height:300px" class="py-3"   id="itemgraph"> 
+                                <v-card style="height:100%;width:100%">
+                                <d3-network :net-nodes="itemnodes" :net-links="itemmlinks" :options="itemoptions" />
+                                </v-card>
+                            </v-flex> -->
+
+                            <v-flex xs12 style="min-height:300px" class="py-3"  id="entitygraph">
+                                    <v-card  style="height:100%;width:100%">
+                                    <d3-network :net-nodes="entitynodes" :net-links="entlinks" :options="entityoptions" />
+                                    </v-card>
+                                </v-flex>
+                        
+                        
+                      </v-layout>
+                    </v-container>
+
+                  </v-card>
+                </v-flex>
+              </v-layout>
+    </script>
+
+
+    <script type="text/x-template" id="entity-extraction-template">
+        <v-flex xs12 sm12 >
+            <v-card>
+                <v-toolbar color="teal" dark>
+                    <v-toolbar-side-icon></v-toolbar-side-icon>
+
+                    <v-toolbar-title>Entity Extraction</v-toolbar-title>
+                </v-toolbar>
+
+                <v-form class="px-3 py-5">
+                    
+                    <v-select
+                      v-model="selectedFile"
+                      :items="csvfiles"
+                      item-text="fname"
+                      item-value="serialno"
+                      label="CSV File"
+                      data-vv-name="selectedFile"
+                      required
+                    ></v-select>
+
+                    <v-select
+                      v-model="titleColumns"
+                      :items="csvColumns"
+                      label="Key Columns"
+                      data-vv-name="titleColumns"
+                      multiple
+                      required
+                    ></v-select>
+
+                    <v-select
+                      v-model="columnsToExtract"
+                      :items="csvColumns"
+                      label="Columns to extract"
+                      data-vv-name="columnsToExtract"
+                      multiple
+                      required
+                    ></v-select>
+
+                    <v-checkbox
+                    v-model="stripHTMLTag"
+                    label="Strip HTML Tag"
+                    ></v-checkbox>
+
+                    
+                    
+                
+                    <v-btn @click="extract">Extract</v-btn>
+                    <v-btn @click="clear">clear</v-btn>
+                  </v-form>
+
+                  <v-data-table
+                        :headers="headers"
+                        :items="rows"
+                        class="elevation-1"
+                    >
+                        <template v-slot:headers="props">
+                        <tr>
+                            
+                            <th
+                            v-for="header in props.headers"
+                            :key="header.text"
+                            :class="['column']"
+                            >
+                            {{ header.text }}
+                            </th>
+                        </tr>
+                        </template>
+                        <template v-slot:items="props">
+                        <tr >
+                            <td v-for="(field,fidx) in headers" v-html="props.item[field.value]" :key="'column_'+fidx"></td>
+                        </tr>
+                        </template>
+                    </v-data-table>
+
+            </v-card>
+        </v-flex>
+    </script>
+
+    <script type="text/x-template" id="category-rule-template">
+        <v-flex xs12 sm12 >
+            <v-card>
+                <v-toolbar color="teal" dark>
+                    <v-toolbar-title>Category Rule</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-btn icon @click="addCate()">
+                        <v-icon>add</v-icon>
+                    </v-btn>
+                </v-toolbar>
+
+                <v-form class="px-3 py-5">
+                    <v-select
+                      v-model="selectedFile"
+                      :items="csvfiles"
+                      item-text="fname"
+                      item-value="serialno"
+                      label="CSV File"
+                      data-vv-name="selectedFile"
+                      required
+                    ></v-select>
+
+                    <div class="text-xs-left">
+                            <v-btn
+                              color="primary"
+                              @click="addCate()"
+                            >
+                              Add Category
+                            </v-btn>
+                        </div>
+                  </v-form>
+
+
+                  <v-expansion-panel focusable>
+                    <v-expansion-panel-content
+                      v-for="(category,i) in categories"
+                      :key="i"
+                    >
+                      <template v-slot:header>
+                        <div>{{category.category}}</div>
+                      </template>
+                      <v-card>
+                            <v-container >
+                            <v-flex xs12>
+                                    <v-text-field
+                                        v-model="category.category"
+                                      label="Category Name"
+                                    ></v-text-field>
+                            </v-flex>
+                        </v-container >
+
+                        <v-list
+                            subheader
+                            three-line
+                            >
+                            
+
+  
+                                        <v-container grid-list-md text-xs-center v-for="(rule, index) in category.rules">
+                                            <v-subheader>Rule #{{index+1}}</v-subheader>
+                                            <v-layout row wrap>
+                                                <v-flex xs12 md6  d-flex>
+                                                    <v-select
+                                                        v-model= "rule.primarytype"
+                                                        :items="['Contains Entity', 'Contains Keyphrase']"
+                                                        label="Primary Condition Type"
+                                                    ></v-select>
+                                                </v-flex>
+
+                                                <v-flex xs12 md6  d-flex>
+                                                        <v-combobox
+                                                            v-model= "rule.primaryobjects"
+                                                            :items="rule.primarytype=='Contains Entity'?myEntities:myKeyPhrases"
+                                                            label="Primary Condition Object"
+                                                            multiple
+                                                        ></v-combobox>
+                                                </v-flex>
+                                            
+                                                <v-flex xs12 md12  d-flex>
+                                                        <v-select
+                                                            v-model= "rule.secondarycondition"
+                                                            :items="['And', 'Or']"
+                                                            label="And/Or"
+                                                        ></v-select>
+                                                </v-flex>
+                                            
+                                                <v-flex xs12 md6 d-flex>
+                                                    <v-select
+                                                        v-model= "rule.secondarytype"
+                                                        :items="['Contains Entity', 'Contains Keyphrase']"
+                                                        label="Secondary Condition Type"
+                                                        
+                                                    ></v-select>
+                                                </v-flex>
+                                            
+                                                <v-flex xs12 md6 d-flex>
+                                                        <v-combobox
+                                                            v-model= "rule.secondaryobjects"
+                                                            :items="rule.secondarytype=='Contains Entity'?myEntities:myKeyPhrases"
+                                                            label="Secondary Condition Object"
+                                                            multiple
+                                                        ></v-combobox>
+                                                </v-flex>
+
+                                            </v-layout>
+                                            <div class="text-xs-left">
+                                                    <v-btn 
+                                                        color="warning"
+                                                        @click="removeCategoryRule(category.category, index)"
+                                                    >
+                                                        Remove Rule
+                                                    </v-btn>
+                                                </div>
+                                            <v-divider :key="`divider-${index}`" class="mt-3"></v-divider>
+                                        </v-container>
+
+                                        
+                            
+                        </v-list>
+
+
+
+                        <div class="text-xs-left">
+                            <v-btn
+                              color="success"
+                              @click="addRule(category.category)"
+                            >
+                              Add Rule
+                            </v-btn>
+
+                            
+                            <v-btn 
+                                color="warning"
+                                @click="removeCategory(category.category)"
+                            >
+                                Remove Category
+                            </v-btn>
+                                
+                        </div>
+                      </v-card>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+
+
+            </v-card>
+        </v-flex>
+    </script>
+
+
+    <script src="/node_modules/vue/dist/vue.min.js"></script>
+    <script src="/node_modules/vuetify/dist/vuetify.min.js"></script>
+    <script src="/node_modules/chart.js/dist/Chart.bundle.min.js"></script>
+    <script src="/node_modules/vue-chartjs/dist/vue-chartjs.min.js"></script>
+    <script src="/node_modules/vue-chartkick/dist/vue-chartkick.min.js"></script>
+
+    <script src="/node_modules/vuex/dist/vuex.min.js"></script>
+    <script src="/node_modules/vue-router/dist/vue-router.min.js"></script>
+
+    <script src="/node_modules/file-saver/dist/FileSaver.min.js"></script>
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/node_modules/node-nlp/dist/bundle.js"></script>
+
+    <script src="/node_modules/vue-d3-network/dist/vue-d3-network.umd.min.js"></script>
+    <script src="/node_modules/echarts/dist/echarts.min.js"></script>
+    <script src="/node_modules/echarts-wordcloud/dist/echarts-wordcloud.min.js"></script>
+    <script src="/node_modules/vue-resize-directive/dist/Vueresize.js"></script>
+
+    <!-- <script src="/node_modules/comma-separated-values/csv.min.js"></script> -->
+    <script src="/node_modules/csv-js/csv.js"></script>
+
+    <script src="/public/js/main.js"></script>
+
+    <script id="nlpworker" type="javascript/worker">
+        
+
+
+        importScripts("http://localhost:3000/node_modules/node-nlp/dist/bundle.js")
+
+        var nlpmanager = null
+        
+        debugger
+ 
+        
+        self.onmessage = function(e) {
+            if(nlpmanager == null) {
+                console.log(nlp)
+                console.log(NerManager)
+                nlpmanager = new NerManager({ threshold: 0.8 })
+                e.data.modelEntities.forEach(function (ent) {
+                    var keywords = ent.keywords.split("\n");
+                    for (var i = 0; i < keywords.length; i++) {
+                        keywords[i] = keywords[i].trim();
+                    }
+                    nlpmanager.addNamedEntityText(
+                        ent.name,
+                        ent.name,
+                        ['en'],
+                        keywords
+                    );
+                })
+            }
+            var text = e.data.text
+            var textidx = e.data.textidx
+            window.nlpmanagers[bulkid].findEntities(
+                        text,
+                        'en',
+                ).then(entities => {
+                    self.postMessage({
+                        entities:entities,
+                        textidx:textidx
+                    });
+                })
+        };
+
+    </script>
+
+
+</body>
+
+</html>

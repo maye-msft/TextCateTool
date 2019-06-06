@@ -1,0 +1,6 @@
+id,title,text
+1,word1-1,word1-2 word2-1 other words
+2,word2-1,word2-2 word1-1 other words
+3,word2-1,word2-1 word3-1 other words
+4,word3-1,word1-2 word3-2 other words
+5,word3-2,word2-2 word3-1 other words

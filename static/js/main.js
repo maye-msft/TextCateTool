@@ -1966,7 +1966,7 @@ function openFile(func) {
 function parseCSV(csvcontent) {
 
     // var csvdata = new CSV(csvcontent, { header: true }).parse();
-    var csvdata = CSV.parse(csvcontent);
+    var csvdata = CSVHelper.parse(csvcontent);
     var rows = [];
     var headers = [];
     if (csvdata.length > 0) {
@@ -1985,6 +1985,8 @@ function parseCSV(csvcontent) {
 }
 
 function encodeCSV(header, data) {
+
+   
     var csv = new CSV(data, { header: header }).encode();
     var blob = new Blob([csv], { type: "text/plain;charset=utf-8" });
     saveAs(blob, "data.csv");

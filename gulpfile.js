@@ -1,11 +1,12 @@
 
 
-const { src, dest, parallel } = require('gulp');
+const { src, dest, parallel, series } = require('gulp');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
 const browserify = require('gulp-browserify')
 const babelify = require('babelify')
+
 
 function html() {
     return src('./static/index.html')
@@ -35,7 +36,9 @@ function js() {
         "node_modules/echarts/dist/**/*.*",
         "node_modules/echarts-wordcloud/dist/**/*.*",
         "node_modules/vue-resize-directive/dist/**/*.*",
-        "node_modules/csv-js/**/*.*"
+        "node_modules/csv-js/**/*.*",
+        "node_modules/comma-separated-values/**/*.*",
+        "./static/js/CSV.js"
     ], {base: "."})
     .pipe(dest('dest/'));
 }
@@ -54,6 +57,8 @@ function script() {
       .pipe(rename({ extname: '.js' }))
       .pipe(dest('dest/static/js/'));
   }
+
+
 
 
 exports.default = parallel(html, script, js, server)

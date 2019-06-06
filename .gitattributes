@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+executable/text-categorization-desktop-macos filter=lfs diff=lfs merge=lfs -text
+executable/text-categorization-desktop-win.exe filter=lfs diff=lfs merge=lfs -text
+executable/text-categorization-desktop-linux filter=lfs diff=lfs merge=lfs -text

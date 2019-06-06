@@ -84,7 +84,6 @@ This README is show results of [sample project.json](./sample/sampleproject.json
 ``` shell
 npm install
 npm run start-server
-
 ```
 
 ## Build Executable
@@ -93,9 +92,7 @@ npm run start-server
 npm install pkg -g
 npm install
 gulp
-pkg . --targets=node8-macos --output ./executable/text-categorization-desktop-macos
-pkg . --targets=node8-win --output ./executable/text-categorization-desktop-win.exe
-pkg . --targets=node8-linux --output ./executable/text-categorization-desktop-linux
+npm run build-exe
 ```
 
 
